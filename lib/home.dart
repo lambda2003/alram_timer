@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -112,10 +113,29 @@ class _HomeState extends State<Home> {
                 use24hFormat: true,
                 // showTimeSeparator: true,
                 onDateTimeChanged: (value) {
-                 
-                  chosenDateTime = value;
-                  _isAlarm = true;
-                  setState(() {});
+                  if(_isStart && _isAlarm){
+                
+                    Get.defaultDialog(
+                      barrierDismissible: false,
+                      title: 'Alarm is already set.',
+                      content: Text('Do you want to stop it? 멈춘후 다시 셋팅해 주세요.'),
+                      actions: [
+                        ElevatedButton(onPressed: (){
+                          _isAlarm = false;
+                          _isStart = false;
+                          Get.back();
+                        }, child: Text('Yes')),
+                        ElevatedButton(onPressed: (){
+                          Get.back();
+
+                        }, child: Text('No')),
+                      ]
+                    );
+                  }else{
+                    chosenDateTime = value;
+                    _isAlarm = true;
+                    setState(() {});
+                  }
                 },
 
               ),
