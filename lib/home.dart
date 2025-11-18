@@ -46,18 +46,15 @@ class _HomeState extends State<Home> {
       +':${now.minute.toString().padLeft(2,'0')}'
       +':${now.second.toString().padLeft(2,'0')}'
       ;
-    
+        // 알람이지 SET 그리고 Alram 준비
         if(!_isStart &&_isAlarm && chosenDateTime!.millisecondsSinceEpoch <= now.millisecondsSinceEpoch){
            _isStart = true;
-        
-          
         }
-      
-        if( now.millisecondsSinceEpoch < chosenDateTime!.add(const Duration(minutes: 1)).millisecondsSinceEpoch){
-          
-
+        if( now.millisecondsSinceEpoch < chosenDateTime!.add(const Duration(minutes: 1)).millisecondsSinceEpoch){ 
+          // 알람 1분 이내, 깜빡이게 하기 위함. 
           _isBlank = !_isBlank; 
         }else{
+          // 1분 후에 자동으로  알람이 멈추게 하기 위함. 
            _isBlank = false;
           _isAlarm = false;
           _isStart = false;
@@ -114,21 +111,24 @@ class _HomeState extends State<Home> {
                 // showTimeSeparator: true,
                 onDateTimeChanged: (value) {
                   if(_isStart && _isAlarm){
-                
+                    // 현재 알람이 설정되있음. 
+                    // 메세지 보내고 리셋 할것인지 물어보는 부분. 
                     Get.defaultDialog(
                       barrierDismissible: false,
-                      title: 'Alarm is already set.',
-                      content: Text('Do you want to stop it? 멈춘후 다시 셋팅해 주세요.'),
+                      title: '알람이 벌써 셋팅되있습니다.',
+                      content: Text('기존 알람을 끄시겠습니까?'),
                       actions: [
                         ElevatedButton(onPressed: (){
+                          // 알람을 리셋
                           _isAlarm = false;
                           _isStart = false;
                           Get.back();
-                        }, child: Text('Yes')),
+                        }, child: Text('네')),
                         ElevatedButton(onPressed: (){
+                          // 기존것 유지 
                           Get.back();
 
-                        }, child: Text('No')),
+                        }, child: Text('아니오')),
                       ]
                     );
                   }else{
